@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  database:
+    container_name: database
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: backend_db
+    ports:
+      - 5431:5432
+
+
