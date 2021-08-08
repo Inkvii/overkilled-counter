@@ -2,11 +2,8 @@ import {Button, Container, Grid} from "@material-ui/core"
 import Counter from "component/Counter"
 import {useEffect, useState} from "react"
 import axios from "axios"
-
-interface CounterDto {
-	name: string,
-	count: number
-}
+import {CounterDto} from "component/counterInterfaces"
+import {useHistory, useParams} from "react-router-dom"
 
 // just a verification what is being sent through interceptor
 axios.interceptors.request.use(request => {
@@ -16,11 +13,16 @@ axios.interceptors.request.use(request => {
 	return request
 })
 
+interface ParamTypes {
+	paramName: string
+}
 
 function CounterView() {
-
-	const [name, setName] = useState<string>("Placeholder name")
+	const {paramName} = useParams<ParamTypes>()
+	const [name, setName] = useState<string>(paramName)
 	const [count, setCount] = useState<number>(0)
+
+	const history = useHistory()
 
 	useEffect(() => {
 		axios.get(`http://localhost:8080/counters/${name}`)
@@ -48,14 +50,16 @@ function CounterView() {
 			})
 	}
 
+
+	const onClickBack = () => {
+		history.push("/")
+	}
+
 	return (
 		<Container style={{marginTop: "10px"}}>
 			<Grid container spacing={3}>
-				<Grid item xs={6}>
-					<Button variant={"contained"} fullWidth>All counters</Button>
-				</Grid>
-				<Grid item xs={6}>
-					<Button variant={"contained"} fullWidth>This counter</Button>
+				<Grid item xs={12}>
+					<Button variant={"contained"} fullWidth onClick={onClickBack}>All counters</Button>
 				</Grid>
 			</Grid>
 			<Counter name={name} count={count} onClickButtonFunction={onClickButtonCallback}/>

@@ -8,8 +8,8 @@ function App() {
 		<div>
 			<BrowserRouter>
 				<Switch>
-					<Route exact path={"/"} component={CounterView}/>
-					<Route exact path={"/list"} component={AllCounters}/>
+					<Route exact path={"/:paramName"} component={CounterView}/>
+					<Route exact path={"/"} component={AllCounters}/>
 				</Switch>
 			</BrowserRouter>
 		</div>
