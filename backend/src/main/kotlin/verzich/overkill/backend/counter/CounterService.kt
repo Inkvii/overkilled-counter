@@ -21,7 +21,7 @@ class CounterService(private val counterRepository: CounterRepository) {
     }
 
     @Transactional
-    fun persistCounterToDatabase(counter: CounterDto) {
+    fun persistCounterToDatabase(counter: CounterDto): CounterDto {
         log.debug("> persistCounterToDatabase")
 
         // get or create
@@ -32,8 +32,17 @@ class CounterService(private val counterRepository: CounterRepository) {
         }
 
         counterEntity.count++
-        counterRepository.save(counterEntity)
+        val updatedCounterEntity = counterRepository.save(counterEntity)
 
         log.debug("< persistCounterToDatabase")
+        return CounterDto(name = updatedCounterEntity.name, count = updatedCounterEntity.count)
+    }
+
+    fun getCounterByName(name: String): CounterDto {
+        log.debug("> getCounterByName")
+        val counterEntity: CounterEntity =
+            counterRepository.findByName(name).orElseThrow { IllegalArgumentException("Counter with name doesnt exist") }
+        log.debug("< getCounterByName")
+        return CounterDto(name = counterEntity.name, count = counterEntity.count)
     }
 }

@@ -1,6 +1,6 @@
 package verzich.overkill.backend.counter.dto.io
 
-class PersistCounterToDatabaseRequest(
+data class CounterRequestResponse(
     val name: String,
     val count: Long
 ) {

@@ -1,13 +1,10 @@
 package verzich.overkill.backend.counter
 
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import verzich.overkill.backend.counter.dto.CounterDto
 import verzich.overkill.backend.counter.dto.io.AllCountersResponse
-import verzich.overkill.backend.counter.dto.io.PersistCounterToDatabaseRequest
+import verzich.overkill.backend.counter.dto.io.CounterRequestResponse
 
 @RestController
 class CounterController(val counterService: CounterService) {
@@ -23,14 +20,23 @@ class CounterController(val counterService: CounterService) {
         return response
     }
 
+    @GetMapping("/counters/{name}", produces = ["application/json"])
+    fun getCounter(@PathVariable("name") counterName: String): CounterRequestResponse {
+        log.debug("> getCounter")
+        val counterDto = counterService.getCounterByName(counterName)
+        log.debug("< getCounter")
+        return CounterRequestResponse(name = counterDto.name, count = counterDto.count)
+    }
+
     @PutMapping("/counters/add", consumes = ["application/json"], produces = ["application/json"])
-    fun persistCounterToDatabase(@RequestBody request: PersistCounterToDatabaseRequest) {
+    fun persistCounterToDatabase(@RequestBody request: CounterRequestResponse): CounterRequestResponse {
         log.debug("> persistCounterToDatabase")
 
         val counterDto = CounterDto(name = request.name, count = request.count)
-        counterService.persistCounterToDatabase(counterDto)
+        val updatedCounterDto = counterService.persistCounterToDatabase(counterDto)
 
         log.debug("< persistCounterToDatabase")
 
+        return CounterRequestResponse(name = updatedCounterDto.name, count = updatedCounterDto.count)
     }
 }
