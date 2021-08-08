@@ -24,6 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation("org.postgresql:postgresql")
+    implementation("redis.clients:jedis:3.6.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

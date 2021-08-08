@@ -40,7 +40,7 @@ function CounterView() {
 			count: count
 		}
 
-		axios.put("http://localhost:8080/counters/add", payload, {headers: {"Content-Type": "application/json"}})
+		axios.post("http://localhost:8080/counters/increment", payload, {headers: {"Content-Type": "application/json"}})
 			.then(result => {
 				const body: CounterDto = result.data
 				setCount(body.count)

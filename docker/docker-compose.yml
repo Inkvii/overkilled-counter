@@ -10,5 +10,10 @@ services:
       POSTGRES_DB: backend_db
     ports:
       - 5431:5432
+  redis-cache:
+    container_name: redis-cache
+    image: redis:3.2.12-alpine3.8
+    ports:
+      - 6379:6379
 
 
